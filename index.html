@@ -9,7 +9,7 @@
     <button onclick="addTask()">Add Task</button>
     <ul id="todo-list"></ul>
     <script>
-        const apiUrl = 'YOUR_API_GATEWAY_URL'; // Replace with API Gateway invoke URL
+        const apiUrl = 'https://2ns4xpmxcc.execute-api.us-east-1.amazonaws.com/prod'; // Replace with API Gateway invoke URL
         async function fetchTodos() {
             const response = await fetch(apiUrl, { method: 'GET' });
             const todos = await response.json();
