@@ -3,7 +3,7 @@ import json
 import boto3
 
 s3 = boto3.client('s3')
-BUCKET = 'your-bucket-name'  # Instructor provides
+BUCKET = 'your-bucket-name'  # Get this from your S3 bucket
 KEY = 'todos.json'
 
 def lambda_handler(event, context):
