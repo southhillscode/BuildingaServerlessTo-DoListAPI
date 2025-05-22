@@ -3,37 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-Do List App</title>
+    <title>Serverless To-Do List</title>
     <style>
         body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
-        h1 { text-align: center; }
         input { width: 70%; padding: 8px; }
         button { padding: 8px 16px; }
-        ul { list-style: none; padding: 0; }
-        li { padding: 8px; border-bottom: 1px solid #ddd; }
-        .error { color: red; }
+        ul { list-style-type: none; padding: 0; }
+        li { padding: 8px; background: #f9f9f9; margin: 5px 0; }
+        #error { color: red; }
     </style>
 </head>
 <body>
     <h1>To-Do List</h1>
-    <div>
-        <input id="task" type="text" placeholder="Enter task">
-        <button onclick="addTask()">Add Task</button>
-    </div>
-    <p id="error" class="error"></p>
+    <input type="text" id="task-input" placeholder="Enter a task">
+    <button onclick="addTodo()">Add Task</button>
     <ul id="todo-list"></ul>
+    <div id="error"></div>
 
     <script>
-        // Replace with your API Gateway invoke URL
-        const apiUrl = 'https://2ns4xpmxcc.execute-api.us-east-1.amazonaws.com/prod/todos'; // e.g., https://api-id.execute-api.us-east-1.amazonaws.com/prod/todos
+        const apiUrl = 'https://2ns4xpmxcc.execute-api.us-east-1.amazonaws.com/prod/todos';
 
-        // Fetch and display tasks
         async function fetchTodos() {
             try {
                 const response = await fetch(apiUrl, { method: 'GET' });
                 if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
                 const todos = await response.json();
-                // Ensure todos is an array
+                console.log('Raw API response:', todos); // Debug: Log raw data
                 if (!Array.isArray(todos)) throw new Error('Invalid data: not an array');
                 const list = document.getElementById('todo-list');
                 if (!list) throw new Error('Element todo-list not found');
@@ -45,26 +40,30 @@
             }
         }
 
-        // Add a new task
-        async function addTask() {
+        async function addTodo() {
+            const input = document.getElementById('task-input');
+            const task = input.value.trim();
+            if (!task) {
+                document.getElementById('error').textContent = 'Task cannot be empty';
+                return;
+            }
             try {
-                const task = document.getElementById('task').value.trim();
-                if (!task) throw new Error('Task cannot be empty');
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ task })
                 });
                 if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-                document.getElementById('task').value = '';
-                await fetchTodos(); // Refresh the list
+                input.value = '';
+                document.getElementById('error').textContent = '';
+                fetchTodos(); // Refresh list
             } catch (error) {
-                console.error('Error adding task:', error);
+                console.error('Error adding todo:', error);
                 document.getElementById('error').textContent = 'Failed to add task: ' + error.message;
             }
         }
 
-        // Run fetchTodos when the page loads
+        // Load tasks on page load
         document.addEventListener('DOMContentLoaded', fetchTodos);
     </script>
 </body>
