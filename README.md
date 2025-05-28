@@ -6,9 +6,9 @@ This project is a serverless To-Do List application developed for an AP Computer
 
 - **Objective**: Build a serverless API to manage a to-do list, storing tasks in `todos.json` on S3.
 - **Components**:
-  - **S3 Bucket**: `fitz-todo-156` hosts `index.html` (UI) and stores `todos.json` (e.g., `[{"id":1,"task":"Study"}]`).
+  - **S3 Bucket**: `YOUR BUCKET NAME HERE` hosts `index.html` (UI) and stores `todos.json` (e.g., `[{"id":1,"task":"Study"}]`).
   - **Lambda Function**: `TodoFunction` (Python) handles GET (read tasks) and POST (add tasks).
-  - **API Gateway**: Routes requests at `https://2ns4xpmxcc.execute-api.us-east-1.amazonaws.com/prod/todos`.
+  - **API Gateway**: Routes requests at `https://YOUR_API_URL.execute-api.us-east-1.amazonaws.com/prod/todos`.
   - **Frontend**: Accessible at `http://fitz-todo-156.s3-website-us-east-1.amazonaws.com`.
 - **Technologies**: AWS Lambda, S3, API Gateway, Python, JavaScript, HTML/CSS.
 
