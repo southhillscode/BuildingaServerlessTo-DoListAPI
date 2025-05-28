@@ -28,7 +28,7 @@ Step 2: Create the Lambda Function
    - Choose “Author from scratch,” name it `TodoFunction`, select Python 3.9 runtime,   and use for Execution role - “Use an existing role” and choose “LabRole” in the pull down menu (pre-configured in AWS Academy).
    - Paste this code into `lambda_function.py`:
 
-
+#
 import json
 import boto3
 
@@ -65,9 +65,7 @@ def lambda_handler(event, context):
                 'statusCode': 500,
                 'headers': {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET,POST'},
                 'body': json.dumps({'error': 'Failed to read tasks'})
-            }
 
-        # Handle GET or POST
         if event.get('httpMethod') == 'POST':
             try:
                 body = json.loads(event.get('body', '{}'))
