@@ -84,7 +84,7 @@ import json
 import boto3
 
 s3 = boto3.client('s3')
-BUCKET_NAME = 'fitz-todo-156'
+BUCKET_NAME = 'YOUR BUCKET NAME HERE'
 KEY = 'todos.json'
 
 def lambda_handler(event, context):
@@ -195,7 +195,7 @@ This HTML file provides the user interface, with JavaScript to fetch tasks (GET)
         <div id="error"></div>
     </div>
     <script>
-        const apiUrl = 'https://2ns4xpmxcc.execute-api.us-east-1.amazonaws.com/prod/todos';
+        const apiUrl = 'https://YOUR_API_URL_HERE.execute-api.us-east-1.amazonaws.com/prod/todos';
         async function fetchTodos() {
             try {
                 console.log('Fetching todos...');
