@@ -278,6 +278,9 @@ This JSON file stores tasks in the S3 bucket. It starts empty (`[]`) and updates
 - Migrate to DynamoDB for a database solution.
 - Add UI features: task editing, deletion, or completion status.
 
+- Rubric
+https://docs.google.com/spreadsheets/d/18Q2R6rLxSuhKwwS74nWeBjRCgr-1wO8g11FcFPzwHXk/edit?usp=sharing
+
 ## Credits
 
 Developed for AP Computer Science, AWS Academy Learner Lab, May 2025.
