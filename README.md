@@ -28,7 +28,7 @@ This project is a serverless To-Do List application developed for an AP Computer
                  "Effect": "Allow",
                  "Principal": "*",
                  "Action": ["s3:GetObject", "s3:PutObject"],
-                 "Resource": "arn:aws:s3:::fitz-todo-156/*"
+                 "Resource": "arn:aws:s3:::YOUR_BUCKET_NAME_HERE/*"
              }
          ]
      }
