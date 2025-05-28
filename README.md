@@ -260,7 +260,7 @@ This JSON file stores tasks in the S3 bucket. It starts empty (`[]`) and updates
 - **CloudWatch Logs**: Check `TodoFunction` logs for `Event received`, `POST task`, `Wrote to S3`.
 - **S3 Verification**: Download `todos.json` to confirm tasks.
 - **Browser Debugging**:
-  - Open `http://fitz-todo-156.s3-website-us-east-1.amazonaws.com`.
+  - Open YOUR BUCKET URL.
   - Use **Inspect** > **Network** for POST/GET requests.
   - Check **Console** for errors (e.g., `Failed to add task`).
 - **Errors**: If tasks don’t save, share:
