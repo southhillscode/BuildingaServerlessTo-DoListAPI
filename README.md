@@ -62,7 +62,7 @@ This project is a serverless To-Do List application developed for an AP Computer
 - **API Endpoints**:
   - **POST**: Add task
     ```bash
-    curl -X POST -H "Content-Type: application/json" -d '{"task":"Study"}' https://2ns4xpmxcc.execute-api.us-east-1.amazonaws.com/prod/todos
+    curl -X POST -H "Content-Type: application/json" -d '{"task":"Study"}' https://YOUR_API_URL.execute-api.us-east-1.amazonaws.com/prod/todos
     ```
     Response: `{"message": "Task added"}`
   - **GET**: List tasks
