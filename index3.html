@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serverless To-Do List</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 600px; 
+            margin: 20px auto; 
+            padding: 0 20px; 
+            background-color: #f4f4f9; 
+            transition: background-color 0.3s ease; 
+        }
+        h1 { text-align: center; color: #333; }
+        .todo-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        input { padding: 10px; width: calc(100% - 90px); margin-right: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 10px 15px; border: none; border-radius: 4px; background-color: #28a745; color: white; cursor: pointer; }
+        button:hover { background-color: #218838; }
+        ul { list-style: none; padding: 0; }
+        li { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 10px; 
+            margin: 5px 0; 
+            background: #f8f9fa; 
+            border-radius: 4px; 
+        }
+        .completed { text-decoration: line-through; color: #888; }
+        .complete-btn { 
+            padding: 5px 10px; 
+            background-color: #007bff; 
+            font-size: 12px; 
+        }
+        .complete-btn:hover { background-color: #0056b3; }
+        #error { color: red; margin-top: 10px; text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>Serverless To-Do List</h1>
+    <div class="todo-container">
+        <input type="text" id="taskInput" placeholder="Enter a task or color (e.g., blue)">
+        <button id="addButton">Add Task</button>
+        <ul id="todo-list"></ul>
+        <div id="error"></div>
+    </div>
+    <script>
+        const apiUrl = 'https://2ns4xpmxcc.execute-api.us-east-1.amazonaws.com/prod/todos';
+
+        // Validate if a string is a valid CSS color
+        function isValidColor(str) {
+            const div = document.createElement('div');
+            div.style.backgroundColor = str;
+            return div.style.backgroundColor !== '';
+        }
+
+        // Apply the latest color from tasks
+        function applyBackgroundColor(todos) {
+            const latestColor = todos.slice(-1)[0]?.task;
+            if (latestColor && isValidColor(latestColor)) {
+                console.log(`Applying background color: ${latestColor}`);
+                document.body.style.backgroundColor = latestColor;
+            } else {
+                console.log('No valid color found, using default');
+                document.body.style.backgroundColor = '#f4f4f9';
+            }
+        }
+
+        async function fetchTodos() {
+            try {
+                console.log('Fetching todos...');
+                const response = await fetch(apiUrl, { method: 'GET', mode: 'cors' });
+                if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+                const todos = await response.json();
+                console.log('Todos:', todos);
+                if (!Array.isArray(todos)) throw new Error('Invalid data: not an array');
+                const list = document.getElementById('todo-list');
+                list.innerHTML = todos.map(todo => `
+                    <li data-id="${todo.id}">
+                        <span class="task-text">${todo.task}</span>
+                        <button class="complete-btn" onclick="toggleComplete(${todo.id})">Complete</button>
+                    </li>
+                `).join('');
+                document.getElementById('error').textContent = '';
+                applyBackgroundColor(todos);
+            } catch (error) {
+                console.error('Error fetching todos:', error);
+                document.getElementById('error').textContent = 'Failed to load tasks: ' + error.message;
+            }
+        }
+
+        function toggleComplete(id) {
+            try {
+                console.log(`Toggling completion for task ID: ${id}`);
+                const li = document.querySelector(`li[data-id="${id}"]`);
+                const taskText = li.querySelector('.task-text');
+                taskText.classList.toggle('completed');
+                document.getElementById('error').textContent = '';
+            } catch (error) {
+                console.error('Error toggling completion:', error);
+                document.getElementById('error').textContent = 'Failed to toggle task: ' + error.message;
+            }
+        }
+
+        async function addTask() {
+            try {
+                const input = document.getElementById('taskInput');
+                const task = input.value.trim();
+                console.log('Adding task:', task);
+                if (!task) {
+                    document.getElementById('error').textContent = 'Please enter a task!';
+                    return;
+                }
+                const response = await fetch(apiUrl, {
+                    mode: 'cors',
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ task })
+                });
+                if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+                const result = await response.json();
+                console.log('Add task response:', result);
+                document.getElementById('error').textContent = '';
+                input.value = '';
+                fetchTodos();
+            } catch (error) {
+                console.error('Error adding task:', error);
+                document.getElementById('error').textContent = 'Failed to add task: ' + error.message;
+            }
+        }
+
+        document.getElementById('addButton').addEventListener('click', addTask);
+        document.getElementById('taskInput').addEventListener('keypress', e => {
+            if (e.key === 'Enter') addTask();
+        });
+        document.addEventListener('DOMContentLoaded', fetchTodos);
+    </script>
+</body>
+</html>
